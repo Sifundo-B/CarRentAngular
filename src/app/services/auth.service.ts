@@ -18,8 +18,8 @@ export class AuthService {
     return this.http.post<AuthResponse>(`${this.apiUrl}/auth/login`, credentials);
   }
 
-  register(user: User): Observable<User> {
-    return this.http.post<User>(`${this.apiUrl}/auth/register`, user);
+  register(user: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/auth/register`, user, { responseType: 'text' });
   }
 
   // Store token in local storage
