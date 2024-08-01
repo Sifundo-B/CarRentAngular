@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CarService } from 'src/app/services/car.service';
 import { Car } from 'src/app/models/Car';
 
@@ -11,7 +11,7 @@ import { Car } from 'src/app/models/Car';
 export class CarDetailsComponent implements OnInit {
   car: Car | undefined;
 
-  constructor(private route: ActivatedRoute, private carService: CarService) {}
+  constructor(private route: ActivatedRoute, private carService: CarService, private router: Router) {}
 
   ngOnInit(): void {
     const carId = Number(this.route.snapshot.paramMap.get('id'));
@@ -23,5 +23,9 @@ export class CarDetailsComponent implements OnInit {
         console.error('Failed to load car details', error);
       }
     );
+  }
+
+  bookCar(carId: number): void {
+    this.router.navigate(['/rent', { carId }]);
   }
 }

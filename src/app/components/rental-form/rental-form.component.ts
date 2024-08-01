@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { DriverService } from 'src/app/services/driver.service';
 import { RentalService } from 'src/app/services/rental.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -12,8 +13,10 @@ import Swal from 'sweetalert2';
 export class RentalFormComponent implements OnInit {
   rentalForm: FormGroup;
   drivers: any[] = [];
+  carId!: number; // Store the car ID
 
   constructor(
+    private route: ActivatedRoute,
     private rentalService: RentalService,
     private driverService: DriverService,
     private fb: FormBuilder
@@ -28,6 +31,9 @@ export class RentalFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // Get the car ID from the route parameters
+    this.carId = Number(this.route.snapshot.paramMap.get('carId'));
+
     this.driverService.getDrivers().subscribe((drivers) => {
       this.drivers = drivers;
     });
@@ -35,12 +41,11 @@ export class RentalFormComponent implements OnInit {
 
   rentCar() {
     const rentalData = this.rentalForm.value;
-    const carId = 1; // Placeholder, replace with actual car ID
     const userId = 1; // Placeholder, replace with actual user ID
 
     this.rentalService.rentCar({
       userId: userId,
-      carId: carId,
+      carId: this.carId,
       driverId: rentalData.driverId !== 'null' ? rentalData.driverId : undefined,
       startDate: rentalData.startDate,
       endDate: rentalData.endDate,

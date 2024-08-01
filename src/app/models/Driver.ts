@@ -1,7 +1,7 @@
 export interface Driver {
-    id: number;
+    id?: number;
     name: string;
-    licenseNumber: string;
-    licenseImageUrl: string;
+    licenseNumber?: string;
+    licenseImageUrl?: string;
   }
   

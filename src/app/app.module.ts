@@ -15,6 +15,7 @@ import { CarDetailsComponent } from './components/car-details/car-details.compon
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { CarManagementComponent } from './components/car-management/car-management.component';
+import { DriverManagementComponent } from './components/driver-management/driver-management.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { CarManagementComponent } from './components/car-management/car-manageme
     CarDetailsComponent,
     LoginComponent,
     RegisterComponent,
-    CarManagementComponent
+    CarManagementComponent,
+    DriverManagementComponent
   ],
   imports: [
     BrowserModule,

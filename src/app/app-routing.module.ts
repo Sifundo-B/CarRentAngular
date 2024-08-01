@@ -8,6 +8,7 @@ import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { CarDetailsComponent } from './components/car-details/car-details.component';
 import { CarManagementComponent } from './components/car-management/car-management.component';
+import { DriverManagementComponent } from './components/driver-management/driver-management.component';
 
 const routes: Routes = [
   { path: '', component: CarListComponent },
@@ -16,6 +17,8 @@ const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'car-details/:id', component: CarDetailsComponent },
   { path: 'car-management', component: CarManagementComponent, canActivate: [AuthGuard] },
+  { path: 'driver-management', component: DriverManagementComponent, canActivate: [AuthGuard] },
+
   { path: '**', redirectTo: '', pathMatch: 'full' }
 ];
 
