@@ -11,6 +11,18 @@ import { Car } from 'src/app/models/Car';
 export class CarManagementComponent implements OnInit {
   carForm: FormGroup;
   cars: Car[] = [];
+  carMakes = ['Ford', 'Toyota', 'BMW', 'Honda', 'Volkswagen'];
+  carModels: string[] = [];
+  carTypes = ['Sedan', 'SUV', 'Hatchback', 'Convertible', 'Truck'];
+  loading = false;
+
+  modelOptions: { [key: string]: string[] } = {
+    Ford: ['Fiesta', 'Focus', 'Mustang', 'Explorer', 'Ranger'],
+    Toyota: ['Corolla', 'Camry', 'Hilux', 'RAV4', 'Yaris'],
+    BMW: ['X1', 'X3', 'X5', '3 Series', '5 Series'],
+    Honda: ['Civic', 'Accord', 'CR-V', 'Fit', 'Pilot'],
+    Volkswagen: ['Golf', 'Polo', 'Tiguan', 'Passat', 'Jetta']
+  };
 
   constructor(private fb: FormBuilder, private carService: CarService) {
     this.carForm = this.fb.group({
@@ -27,7 +39,7 @@ export class CarManagementComponent implements OnInit {
   }
 
   loadCars() {
-    this.carService.getAvailableCars().subscribe(
+    this.carService.getAllCars().subscribe(
       (cars) => {
         this.cars = cars;
       },
@@ -37,12 +49,19 @@ export class CarManagementComponent implements OnInit {
     );
   }
 
+  onMakeChange() {
+    const selectedMake = this.carForm.get('make')?.value;
+    this.carModels = this.modelOptions[selectedMake] || [];
+    this.carForm.get('model')?.setValue(''); // Reset model selection
+  }
+
   onFileChange(event: any) {
     const file = event.target.files[0];
     this.carForm.patchValue({ file: file });
   }
 
   addCar() {
+    this.loading = true;
     const carData = this.carForm.value;
     const car: Car = {
       id: 0, // Placeholder; will be assigned by the backend
@@ -58,9 +77,12 @@ export class CarManagementComponent implements OnInit {
       (response) => {
         console.log('Car added successfully', response);
         this.loadCars(); // Reload the car list to include the new car
+        this.carForm.reset(); // Clear the form after submission
+        this.loading = false;
       },
       (error) => {
         console.error('Failed to add car', error);
+        this.loading = false;
       }
     );
   }

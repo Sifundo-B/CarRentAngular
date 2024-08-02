@@ -1,63 +1,74 @@
 <div class="container mx-auto p-4">
-    <h2 class="text-2xl font-semibold mb-4">Car Management</h2>
-  
-    <!-- Add Car Form -->
-    <div class="bg-white p-6 rounded-lg shadow-md mb-6">
-      <h3 class="text-lg font-semibold mb-4">Add New Car</h3>
-      <form [formGroup]="carForm" (ngSubmit)="addCar()">
-        <div class="mb-4">
-          <label class="block text-sm font-medium text-gray-700 mb-1">Make</label>
-          <input type="text" formControlName="make" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600">
-        </div>
-        <div class="mb-4">
-          <label class="block text-sm font-medium text-gray-700 mb-1">Model</label>
-          <input type="text" formControlName="model" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600">
-        </div>
-        <div class="mb-4">
-          <label class="block text-sm font-medium text-gray-700 mb-1">Type</label>
-          <input type="text" formControlName="type" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600">
-        </div>
-        <div class="mb-4">
-          <label class="block text-sm font-medium text-gray-700 mb-1">Rental Price</label>
-          <input type="number" formControlName="rentalPrice" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600">
-        </div>
-        <div class="mb-4">
-          <label class="block text-sm font-medium text-gray-700 mb-1">Image</label>
-          <input type="file" (change)="onFileChange($event)" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600">
-        </div>
-        <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">Add Car</button>
-      </form>
-    </div>
-  
-    <!-- List of Cars -->
-    <div class="bg-white p-6 rounded-lg shadow-md">
-      <h3 class="text-lg font-semibold mb-4">Current Cars</h3>
-      <table class="min-w-full bg-white">
-        <thead>
-          <tr>
-            <th class="py-2">Make</th>
-            <th class="py-2">Model</th>
-            <th class="py-2">Type</th>
-            <th class="py-2">Rental Price</th>
-            <th class="py-2">Availability</th>
-            <th class="py-2">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let car of cars" class="border-t">
-            <td class="py-2">{{ car.make }}</td>
-            <td class="py-2">{{ car.model }}</td>
-            <td class="py-2">{{ car.type }}</td>
-            <td class="py-2">{{ car.rentalPrice | currency }}</td>
-            <td class="py-2">{{ car.availability ? 'Available' : 'Not Available' }}</td>
-            <td class="py-2">
-              <button (click)="toggleAvailability(car)" class="bg-green-500 text-white py-1 px-2 rounded-lg hover:bg-green-600">
-                Toggle Availability
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+  <h2 class="text-2xl font-semibold mb-4">Car Management</h2>
+
+  <!-- Add Car Form -->
+  <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+    <h3 class="text-lg font-semibold mb-4">Add New Car</h3>
+    <form [formGroup]="carForm" (ngSubmit)="addCar()">
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 mb-1">Make</label>
+        <select formControlName="make" (change)="onMakeChange()" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600">
+          <option value="" disabled>Select Make</option>
+          <option *ngFor="let make of carMakes" [value]="make">{{ make }}</option>
+        </select>
+      </div>
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 mb-1">Model</label>
+        <select formControlName="model" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600">
+          <option value="" disabled>Select Model</option>
+          <option *ngFor="let model of carModels" [value]="model">{{ model }}</option>
+        </select>
+      </div>
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 mb-1">Type</label>
+        <select formControlName="type" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600">
+          <option value="" disabled>Select Type</option>
+          <option *ngFor="let type of carTypes" [value]="type">{{ type }}</option>
+        </select>
+      </div>
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 mb-1">Rental Price</label>
+        <input type="number" formControlName="rentalPrice" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600">
+      </div>
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 mb-1">Image</label>
+        <input type="file" (change)="onFileChange($event)" class="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600">
+      </div>
+      <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 flex items-center justify-center" [disabled]="loading">
+        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-2"></span>
+        <span>{{ loading ? 'Submitting...' : 'Add Car' }}</span>
+      </button>
+    </form>
   </div>
-  
+
+  <!-- List of Cars -->
+  <div class="bg-white p-6 rounded-lg shadow-md">
+    <h3 class="text-lg font-semibold mb-4">Current Cars</h3>
+    <table class="min-w-full bg-white">
+      <thead>
+        <tr>
+          <th class="py-2">Make</th>
+          <th class="py-2">Model</th>
+          <th class="py-2">Type</th>
+          <th class="py-2">Rental Price</th>
+          <th class="py-2">Availability</th>
+          <th class="py-2">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let car of cars" class="border-t">
+          <td class="py-2">{{ car.make }}</td>
+          <td class="py-2">{{ car.model }}</td>
+          <td class="py-2">{{ car.type }}</td>
+          <td class="py-2">{{ car.rentalPrice | currency:'ZAR' }}</td>
+          <td class="py-2">{{ car.availability ? 'Available' : 'Not Available' }}</td>
+          <td class="py-2">
+            <button (click)="toggleAvailability(car)" class="bg-green-500 text-white py-1 px-2 rounded-lg hover:bg-green-600">
+              Toggle Availability
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-// import { AuthRequest, AuthResponse, User } from '../models/auth';
 import { AuthRequest} from '../models/AuthRequest ';
 import { AuthResponse } from '../models/AuthResponse ';
+
 import { User } from '../models/User';
 import { environment } from '../environments/environment';
+import { jwtDecode } from 'jwt-decode';
 @Injectable({
   providedIn: 'root'
 })
@@ -13,7 +14,10 @@ export class AuthService {
   private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) { }
-
+  decodeToken(): any {
+    const token = this.getToken();
+    return token ? jwtDecode(token) : null;
+  }
   login(credentials: AuthRequest): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/auth/login`, credentials);
   }

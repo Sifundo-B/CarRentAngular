@@ -1,22 +1,31 @@
-<nav class="bg-blue-600 p-4">
-    <div class="container mx-auto flex justify-between items-center">
-      <a href="#" class="text-white text-lg font-bold">Car Rental</a>
-      <div class="hidden md:flex space-x-4">
-        <a href="#" class="text-white hover:text-gray-300">Home</a>
-        <a href="#" class="text-white hover:text-gray-300">Cars</a>
-        <a href="#" class="text-white hover:text-gray-300">Login</a>
-        <a href="#" class="text-white hover:text-gray-300">Register</a>
-      </div>
-      <button class="md:hidden text-white" id="menu-button">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-        </svg>
-      </button>
+<nav class="bg-blue-600 p-4 fixed w-full z-10 top-0">
+  <div class="container mx-auto flex justify-between items-center">
+    <a href="home" class="text-white text-lg font-bold">Car Rental</a>
+    <div class="hidden md:flex space-x-4">
+      <!-- Show login/register if not logged in, show logout if logged in -->
+      <ng-container *ngIf="!isLoggedIn; else loggedInTemplate">
+        <a href="login" class="text-white hover:text-gray-300">Login</a>
+        <a href="register" class="text-white hover:text-gray-300">Register</a>
+      </ng-container>
+      <ng-template #loggedInTemplate>
+        <a href="#" (click)="logout()" class="text-white hover:text-gray-300">Logout</a>
+      </ng-template>
     </div>
-    <div class="md:hidden bg-blue-700 space-y-2 p-4 hidden" id="menu">
-      <a href="#" class="block text-white hover:text-gray-300">Home</a>
-      <a href="#" class="block text-white hover:text-gray-300">Cars</a>
-      <a href="#" class="block text-white hover:text-gray-300">Login</a>
-      <a href="#" class="block text-white hover:text-gray-300">Register</a>
-    </div>
-  </nav>
+    <button class="md:hidden text-white" id="menu-button">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+      </svg>
+    </button>
+  </div>
+  <div class="md:hidden bg-blue-700 space-y-2 p-4 hidden" id="menu">
+    <a href="home" class="block text-white hover:text-gray-300">Home</a>
+    <a href="car-management" class="block text-white hover:text-gray-300">Cars</a>
+    <ng-container *ngIf="!isLoggedIn; else mobileLoggedInTemplate">
+      <a href="login" class="block text-white hover:text-gray-300">Login</a>
+      <a href="register" class="block text-white hover:text-gray-300">Register</a>
+    </ng-container>
+    <ng-template #mobileLoggedInTemplate>
+      <a href="#" (click)="logout()" class="block text-white hover:text-gray-300">Logout</a>
+    </ng-template>
+  </div>
+</nav>

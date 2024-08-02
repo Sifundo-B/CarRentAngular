@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { DriverService } from 'src/app/services/driver.service';
 import Swal from 'sweetalert2';
@@ -11,6 +11,8 @@ import Swal from 'sweetalert2';
 export class DriverManagementComponent implements OnInit {
   driverForm: FormGroup;
   drivers: any[] = [];
+  loading = false;
+  @ViewChild('fileInput') fileInput!: ElementRef;
 
   constructor(
     private fb: FormBuilder,
@@ -45,20 +47,30 @@ export class DriverManagementComponent implements OnInit {
   }
 
   addDriver() {
+    if (this.driverForm.invalid) {
+      return;
+    }
+
+    this.loading = true;
+
     const driverData = this.driverForm.value;
     this.driverService.addDriver(
       { name: driverData.name },
       driverData.licenseFile
     ).subscribe(
       (response) => {
+        this.loading = false;
         Swal.fire({
           icon: 'success',
           title: 'Driver Added Successfully',
           text: 'The driver has been added and license uploaded.',
         });
         this.loadDrivers(); // Refresh the driver list
+        this.driverForm.reset(); // Clear the form after submission
+        this.fileInput.nativeElement.value = ''; // Clear the file input
       },
       (error) => {
+        this.loading = false;
         Swal.fire({
           icon: 'error',
           title: 'Failed to Add Driver',

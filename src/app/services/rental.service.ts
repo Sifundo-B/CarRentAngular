@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Rental } from '../models/Rental';
 import { environment } from '../environments/environment';
-
+import { RentalRequest } from '../models/RentalRequest';
 
 @Injectable({
   providedIn: 'root'
@@ -13,11 +13,15 @@ export class RentalService {
 
   constructor(private http: HttpClient) { }
 
-  rentCar(rental: Rental): Observable<Rental> {
-    return this.http.post<Rental>(`${this.apiUrl}/rentals/rent`, rental);
+  rentCar(rentalRequest: RentalRequest): Observable<any> {
+    return this.http.post(`${this.apiUrl}/rentals/rent`, rentalRequest);
   }
 
   getRentalsByUser(userId: number): Observable<Rental[]> {
     return this.http.get<Rental[]>(`${this.apiUrl}/rentals/user/${userId}`);
+  }
+
+  getRentalById(rentalId: string): Observable<Rental> {
+    return this.http.get<Rental>(`${this.apiUrl}/rentals/${rentalId}`);
   }
 }

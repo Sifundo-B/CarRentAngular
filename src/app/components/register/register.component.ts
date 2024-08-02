@@ -43,7 +43,7 @@ export class RegisterComponent {
               timer: 1500,
               showConfirmButton: false
             });
-            this.router.navigate(['/']);
+            this.router.navigate(['/home']);
           },
           (loginError) => {
             Swal.fire({
