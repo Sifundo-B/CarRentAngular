@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Rental } from '../models/Rental';
 import { environment } from '../environments/environment';
 import { RentalRequest } from '../models/RentalRequest';
+import { RentalResponse } from '../models/RentalResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -17,11 +17,11 @@ export class RentalService {
     return this.http.post(`${this.apiUrl}/rentals/rent`, rentalRequest);
   }
 
-  getRentalsByUser(userId: number): Observable<Rental[]> {
-    return this.http.get<Rental[]>(`${this.apiUrl}/rentals/user/${userId}`);
+  getRentalsByUser(userId: number): Observable<RentalResponse[]> {
+    return this.http.get<RentalResponse[]>(`${this.apiUrl}/rentals/user/${userId}`);
   }
 
-  getRentalById(rentalId: string): Observable<Rental> {
-    return this.http.get<Rental>(`${this.apiUrl}/rentals/${rentalId}`);
+  getRentalById(rentalId: number): Observable<RentalResponse> {
+    return this.http.get<RentalResponse>(`${this.apiUrl}/rentals/${rentalId}`);
   }
 }

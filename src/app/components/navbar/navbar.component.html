@@ -1,8 +1,11 @@
-<nav class="bg-blue-600 p-4 fixed w-full z-10 top-0">
+<nav *ngIf="showNavbar" class="bg-blue-600 p-4 fixed w-full z-10 top-0">
   <div class="container mx-auto flex justify-between items-center">
-    <a href="home" class="text-white text-lg font-bold">Car Rental</a>
+    <div class="flex items-center space-x-4">
+      <a href="home" class="text-white text-lg font-bold">Car Rental</a>
+      <a href="home" class="block text-white hover:text-gray-300">Home</a>
+      <a href="my-rentals" class="block text-white hover:text-gray-300">My Rentals</a>
+    </div>
     <div class="hidden md:flex space-x-4">
-      <!-- Show login/register if not logged in, show logout if logged in -->
       <ng-container *ngIf="!isLoggedIn; else loggedInTemplate">
         <a href="login" class="text-white hover:text-gray-300">Login</a>
         <a href="register" class="text-white hover:text-gray-300">Register</a>
@@ -20,6 +23,8 @@
   <div class="md:hidden bg-blue-700 space-y-2 p-4 hidden" id="menu">
     <a href="home" class="block text-white hover:text-gray-300">Home</a>
     <a href="car-management" class="block text-white hover:text-gray-300">Cars</a>
+    <a href="my-rentals" class="block text-white hover:text-gray-300">My Rentals</a>
+
     <ng-container *ngIf="!isLoggedIn; else mobileLoggedInTemplate">
       <a href="login" class="block text-white hover:text-gray-300">Login</a>
       <a href="register" class="block text-white hover:text-gray-300">Register</a>

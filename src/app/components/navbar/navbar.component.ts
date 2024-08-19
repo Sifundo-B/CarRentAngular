@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -9,12 +9,19 @@ import { Router } from '@angular/router';
 })
 export class NavbarComponent implements AfterViewInit, OnInit {
   isLoggedIn = false;
+  showNavbar = true;
 
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
-    // Check authentication status on component initialization
     this.isLoggedIn = this.authService.isAuthenticated();
+
+    // Subscribe to router events to check the current route
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.showNavbar = !['/login', '/register'].includes(event.url);
+      }
+    });
   }
 
   ngAfterViewInit() {
@@ -27,9 +34,8 @@ export class NavbarComponent implements AfterViewInit, OnInit {
   }
 
   logout(): void {
-    // Log out the user and update the navigation display
     this.authService.logout();
     this.isLoggedIn = false;
-    this.router.navigate(['/home']); // Redirect to home page after logout
+    this.router.navigate(['/home']);
   }
 }

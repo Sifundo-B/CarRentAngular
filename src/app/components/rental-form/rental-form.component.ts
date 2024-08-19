@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DriverService } from 'src/app/services/driver.service';
 import { RentalService } from 'src/app/services/rental.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-rental-form',
@@ -21,7 +20,8 @@ export class RentalFormComponent implements OnInit {
     private route: ActivatedRoute,
     private rentalService: RentalService,
     private driverService: DriverService,
-    private authService: AuthService,private router: Router ,
+    private authService: AuthService,
+    private router: Router,
     private fb: FormBuilder
   ) {
     this.rentalForm = this.fb.group({
@@ -65,19 +65,32 @@ export class RentalFormComponent implements OnInit {
 
     this.rentalService.rentCar(rentalRequest).subscribe(
       (response) => {
-        Swal.fire({
-          icon: 'success',
-          title: 'Car Rented Successfully',
-          text: 'Your rental request has been processed.',
-        });
-        this.rentalForm.reset(); // Clear the form
-        this.router.navigate(['/rental-details', response.rentalId]); // Navigate to rental details
+        console.log('Rental response:', response); // Log the entire response
+
+        if (response.rentalId) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Car Rented Successfully',
+            text: 'Your rental request has been processed.',
+          });
+          this.rentalForm.reset(); // Clear the form
+          this.router.navigate(['/rental-details', response.rentalId]); // Navigate to rental details
+        } else {
+          // Handle the case where rentalId is not present
+          Swal.fire({
+            icon: 'warning',
+            title: 'Rental Processed',
+            text: 'The car was rented successfully, but no details are available to display.',
+          });
+          this.router.navigate(['/home']); // Redirect to home or another route
+        }
       },
       (error) => {
+        const errorMessage = error.error || 'There was an issue processing your rental. Please try again.';
         Swal.fire({
           icon: 'error',
           title: 'Rental Failed',
-          text: 'There was an issue processing your rental. Please try again.',
+          text: errorMessage,
         });
         console.error('Failed to rent car', error);
       }

@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Driver } from '../models/Driver';
 import { environment } from '../environments/environment';
-;
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +14,10 @@ export class DriverService {
 
   getDrivers(): Observable<Driver[]> {
     return this.http.get<Driver[]>(`${this.apiUrl}/drivers`);
+  }
+
+  getDriverById(driverId: number): Observable<Driver> {
+    return this.http.get<Driver>(`${this.apiUrl}/drivers/${driverId}`);
   }
 
   addDriver(driver: Driver, file: File): Observable<Driver> {

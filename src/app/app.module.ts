@@ -17,6 +17,8 @@ import { RegisterComponent } from './components/register/register.component';
 import { CarManagementComponent } from './components/car-management/car-management.component';
 import { DriverManagementComponent } from './components/driver-management/driver-management.component';
 import { RentalDetailsComponent } from './components/rental-details/rental-details.component';
+import { MyRentalsComponent } from './components/my-rentals/my-rentals.component';
+import { LandingPageComponent } from './components/landing-page/landing-page.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +31,9 @@ import { RentalDetailsComponent } from './components/rental-details/rental-detai
     RegisterComponent,
     CarManagementComponent,
     DriverManagementComponent,
-    RentalDetailsComponent
+    RentalDetailsComponent,
+    MyRentalsComponent,
+    LandingPageComponent
   ],
   imports: [
     BrowserModule,

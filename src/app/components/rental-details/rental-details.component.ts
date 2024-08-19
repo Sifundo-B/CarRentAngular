@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { RentalService } from 'src/app/services/rental.service';
 import { DriverService } from 'src/app/services/driver.service';
+import { RentalResponse } from 'src/app/models/RentalResponse';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-rental-details',
@@ -9,7 +11,7 @@ import { DriverService } from 'src/app/services/driver.service';
   styleUrls: ['./rental-details.component.scss']
 })
 export class RentalDetailsComponent implements OnInit {
-  rentalDetails: any;
+  rentalDetails: RentalResponse | null = null;
   driverDetails: any;
 
   constructor(
@@ -25,18 +27,45 @@ export class RentalDetailsComponent implements OnInit {
 
   loadRentalDetails(rentalId: string | null): void {
     if (rentalId) {
-      this.rentalService.getRentalById(rentalId).subscribe((details) => {
-        this.rentalDetails = details;
-        if (this.rentalDetails.driverId) {
-          this.loadDriverDetails(this.rentalDetails.driverId);
+      const rentalIdNumber = Number(rentalId);  // Convert rentalId to a number
+      this.rentalService.getRentalById(rentalIdNumber).subscribe(
+        (details: RentalResponse) => {
+          this.rentalDetails = details;
+          if (this.rentalDetails.driverId) {
+            this.loadDriverDetails(this.rentalDetails.driverId);
+          }
+        },
+        (error) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Failed to load rental details. Please try again later.'
+          });
+          console.error('Failed to load rental details', error);
         }
-      });
+      );
     }
   }
 
   loadDriverDetails(driverId: number): void {
-    this.driverService.getDriverById(driverId).subscribe((details) => {
-      this.driverDetails = details;
-    });
+    this.driverService.getDriverById(driverId).subscribe(
+      (details) => {
+        this.driverDetails = details;
+      },
+      (error) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to load driver details. Please try again later.'
+        });
+        console.error('Failed to load driver details', error);
+      }
+    );
+  }
+
+  viewDriverLicense(): void {
+    if (this.driverDetails && this.driverDetails.licenseImageUrl) {
+      window.open(this.driverDetails.licenseImageUrl, '_blank');
+    }
   }
 }
